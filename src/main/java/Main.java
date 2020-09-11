@@ -38,8 +38,12 @@ class Main {
     private void connectDatabase() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/parking","root","");
-            Statement st = con.createStatement();
+            Connection con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            System.out.println("Check");
+            Statement st = con1.createStatement();
+            st.executeUpdate("CREATE DATABASE IF NOT EXISTS parking");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/parking", "root", "");
+            st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM cars");
             int floorC = -1;
             int slotC = -1;
@@ -53,14 +57,6 @@ class Main {
                 slotSet.remove(addedSlot);
 
             }
-//            if(floorC > totalFloors){
-//                System.out.println("Changing Total Floors");
-//                totalFloors = floorC;
-//            }else if (slotC > slotsPerFloor){
-//                System.out.println("Changing Slots per Floor");
-//                slotsPerFloor = slotC;
-//
-//            }
         }catch (Exception e){
             System.out.println(e);
             exit(1);
@@ -76,20 +72,8 @@ class Main {
 
     public static void main(String[] args) throws IOException, SQLException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//        System.out.println("Enter no of Floors: ");
         int ff = 5;
-//        try{
-//            ff = Integer.parseInt(br.readLine());
-//        }catch(Exception e){
-//            System.out.println("Wrong Input Default value 5 is taken ");
-//        }
-//        System.out.println("Enter Slots per Floors: ");
         int ss = 20;
-//        try{
-//            ss = Integer.parseInt(br.readLine());
-//        }catch(Exception e){
-//            System.out.println("Wrong Input Default value 20 is taken ");
-//        }
         Main main = new Main(ff,ss);
         boolean end = false;
         /*
@@ -97,7 +81,6 @@ class Main {
          */
         while(!end){
             System.out.println("Enter 1 to enter car , 2 to exit car , 3 for search queries , 0 to exit , 9 to change floors and slot");
-
             int query;
             try {
                 query = Integer.parseInt(br.readLine());
@@ -112,7 +95,7 @@ class Main {
                 Car car = carEnters(color , reg);
                 if(car != null) {
                     try {
-                        insertDatabase(car);
+                        insertIntoDatabase(car);
                     } catch (Exception e) {
                         System.out.println(e);
                         System.out.println("Try Again");
@@ -123,7 +106,7 @@ class Main {
             }else if(query == 2){
                 System.out.println("Enter Ticket No. ");
                 String ticket = br.readLine();
-                exitDatabase(ticket);
+                removeFromDatabase(ticket);
                 Car exitCar = allCars.get(ticket);
                 if(exitCar != null) {
                     carExits(ticket, exitCar);
@@ -243,16 +226,6 @@ class Main {
 
     }
 
-//    private static void deleteDatabase() {
-//        try {
-//            String query = "DELETE FROM cars";
-//            Statement st = con.createStatement();
-//            st.executeUpdate(query);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     /**
      * Main function to be called when a new car enters the parking lot.
      * Takes nearest slot available from slot set and assign floor and slot accordingly to the car.
@@ -293,7 +266,7 @@ class Main {
         }
     }
 
-    private static void insertDatabase(Car car) throws SQLException {
+    private static void insertIntoDatabase(Car car) throws SQLException {
         String query = " insert into cars (Floor, Slot, RegNo, Color, Ticket)"
                 + " values (?, ?, ?, ?, ?)";
         PreparedStatement statement = con.prepareStatement(query);
@@ -317,7 +290,7 @@ class Main {
             allCars.remove(ticket, exitCar);
     }
 
-    private static void exitDatabase(String ticket) throws SQLException {
+    private static void removeFromDatabase(String ticket) throws SQLException {
         try {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM cars WHERE Ticket= \'" +  ticket + "\'");

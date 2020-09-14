@@ -27,7 +27,7 @@ class TicketTest {
         /*
             Main Class Testing
          */
-        Main testMain = new Main(5,20);
+        InMemory testMain = new InMemory(5,20);
 
         /*
             Testing Main Class Methods

@@ -28,14 +28,19 @@ class Main {
         String slots = properties.getProperty("slotsPerFloor");
         int floor = Integer.parseInt(floors);
         int slot = Integer.parseInt(slots);
-        if(functionToUse.equals("InMemory")){
+        if(functionToUse.equalsIgnoreCase("InMemory")){
             InMemory inMemory = new InMemory(floor,slot);
             inMemory.callQueries();
-        }else if(functionToUse.equals("database")){
+        }else if(functionToUse.equals("mysqlDB")){
             String user = properties.getProperty("user");
             String pass = properties.getProperty("password");
             DataBaseConnect database = new DataBaseConnect(slot, floor, user , pass);
             database.callQueries();
+        }else if(functionToUse.equals("mongoDB")){
+            String user = properties.getProperty("user");
+            String pass = properties.getProperty("password");
+            MongoDbConnect mongoDb = new MongoDbConnect(floor,slot,user,pass);
+            mongoDb.callQueries();
         }
     }
 }

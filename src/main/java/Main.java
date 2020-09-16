@@ -41,6 +41,10 @@ class Main {
             String pass = properties.getProperty("password");
             MongoDbConnect mongoDb = new MongoDbConnect(floor,slot,user,pass);
             mongoDb.callQueries();
+        }else if(functionToUse.equals("radisDB")){
+            RadisDb radisDB = new RadisDb(floor, slot);
+            radisDB.callQueries();
         }
     }
+
 }

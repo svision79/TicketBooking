@@ -48,7 +48,7 @@ public class MongoDbConnect {
         }
         if(!checkDb){
             MongoCredential cred = MongoCredential.createCredential(
-                    "sahil", "parkingdb", "password".toCharArray());
+                    user, "parkingdb", pass.toCharArray());
         }
         database = client.getDatabase("parkingDb");
         boolean collectionExists = client.getDatabase("parkingDb").listCollectionNames()

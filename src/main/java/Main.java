@@ -44,6 +44,12 @@ class Main {
         }else if(functionToUse.equals("radisDB")){
             RadisDb radisDB = new RadisDb(floor, slot);
             radisDB.callQueries();
+        }else if(functionToUse.equals("ES")){
+            String host = properties.getProperty("host");
+            int port1 = Integer.parseInt(properties.getProperty("port1"));
+            int port2 = Integer.parseInt(properties.getProperty("port2"));
+            elasticsearch es = new elasticsearch(floor,slot,host,port1,port2);
+            es.callQueries();
         }
     }
 

@@ -61,8 +61,13 @@ public class MysqlConnect {
                 String color = br.readLine();
                 System.out.println("Enter Registration No of The car ");
                 String reg = br.readLine();
-                Car car = getCar(color, reg);
-                insertIntoDatabase(car);
+                boolean checkCar = checkCarExists(reg);
+                if(checkCar){
+                    System.out.println("Car already exists");
+                }else {
+                    Car car = getCar(color, reg);
+                    insertIntoDatabase(car);
+                }
 
             }else if(query == 2){
                 System.out.println("Enter Ticket No. ");
@@ -116,6 +121,19 @@ public class MysqlConnect {
                 System.out.println("Wrong query");
             }
         }
+    }
+
+    private static boolean checkCarExists(String reg) {
+        try {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM cars WHERE RegNo= \'"+ reg +"\'");
+            if(rs.next()){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private static Car getCar(String color, String reg) {

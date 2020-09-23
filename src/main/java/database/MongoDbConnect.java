@@ -93,8 +93,15 @@ public class MongoDbConnect {
                 String color = br.readLine();
                 System.out.println("Enter Registration No of The car ");
                 String reg = br.readLine();
-                Car car = getCar(color, reg);
-                insertIntoMongoDb(car);
+                boolean checkCar = checkCarExists(reg);
+                if(checkCar){
+                    System.out.println("Car already exists");
+                }else {
+//                    printEverything();
+                    Car car = getCar(color, reg);
+                    insertIntoMongoDb(car);
+                }
+
 
             }else if(query == 2){
                 System.out.println("Enter Ticket No. ");
@@ -147,6 +154,15 @@ public class MongoDbConnect {
                 System.out.println("Wrong query");
             }
         }
+    }
+
+    private static boolean checkCarExists(String reg) {
+        FindIterable<Document> iterDoc = collection.find(Filters.eq("registration",reg));
+        Iterator it = iterDoc.iterator();
+        if(it.hasNext()) {
+            return true;
+        }
+        return false;
     }
 
     private static void getSlotWithRegNoMongoDb(String regNo) {

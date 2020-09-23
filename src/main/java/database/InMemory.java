@@ -48,9 +48,13 @@ public class InMemory {
                 String color = br.readLine();
                 System.out.println("Enter Registration No of The car ");
                 String reg = br.readLine();
-                carEnters(color , reg);
-                printEverything();
-
+                boolean checkCar = checkCarExists(reg);
+                if(checkCar){
+                    System.out.println("Car already exists");
+                }else {
+                    carEnters(color, reg);
+                    printEverything();
+                }
             }else if(query == 2){
                 System.out.println("Enter Ticket No. ");
                 String ticket = br.readLine();
@@ -226,7 +230,15 @@ public class InMemory {
         }
         return slotParked;
     }
-
+    private static boolean checkCarExists(String regNo){
+        for (Map.Entry<String, Car> set : allCars.entrySet()) {
+            Car infoCar = set.getValue();
+            if(infoCar.getRegNo().equals(regNo)){
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * Generic function to print all the details of parking lot
      */

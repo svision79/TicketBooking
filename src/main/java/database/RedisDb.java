@@ -61,8 +61,14 @@ public class RedisDb {
                 String color = br.readLine();
                 System.out.println("Enter Registration No of The car ");
                 String reg = br.readLine();
-                Car car = getCar(color, reg);
-                insertIntoRadisDb(car);
+                boolean checkCar = checkCarExists(reg);
+                if(checkCar){
+                    System.out.println("Car already exists");
+                }else {
+                    Car car = getCar(color, reg);
+                    insertIntoRadisDb(car);
+                }
+
 
             }else if(query == 2){
                 System.out.println("Enter Ticket No. ");
@@ -115,6 +121,18 @@ public class RedisDb {
                 System.out.println("Wrong query");
             }
         }
+    }
+
+    private static boolean checkCarExists(String reg) {
+        list= jedis.keys("*").toArray();
+        for(int i = 0; i<list.length; i++) {
+            String ticket = list[i].toString();
+            Map<String, String> carInfo = jedis.hgetAll(ticket);
+            if(carInfo.get("registration").equals(reg)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void getSlotWithRegNoRadisDb(String regNo) {

@@ -117,9 +117,13 @@ public class elasticsearch {
                 String color = br.readLine();
                 System.out.println("Enter Registration No of The car ");
                 String reg = br.readLine();
-                Car car = getCar(color, reg);
-                insertIntoES(car);
-
+                boolean checkCar = checkCarExists(reg);
+                if(checkCar){
+                    System.out.println("Car already exists");
+                }else {
+                    Car car = getCar(color, reg);
+                    insertIntoES(car);
+                }
             }else if(query == 2){
                 System.out.println("Enter Ticket No. ");
                 String ticket = br.readLine();
@@ -321,6 +325,28 @@ public class elasticsearch {
         for (int i = 1; i <= totalSlots; i++) {
             slotSet.add(i);
         }
+    }
+    private static boolean checkCarExists(String regNo){
+        GetRequest getPersonRequest = new GetRequest("car");
+        for(String id : tickets){
+            getPersonRequest.id(id);
+            GetResponse getResponse = null;
+            try {
+                getResponse = client.get(getPersonRequest, RequestOptions.DEFAULT);
+            } catch (java.io.IOException e){
+                e.getLocalizedMessage();
+            }
+            if(getResponse != null){
+                String reg = (String) getResponse.getSource().get("registration");
+                if(reg.equals(regNo)){
+                    return true;
+                }
+
+            }else{
+                System.out.println("null");
+            }
+        }
+        return false;
     }
     private static Car getCar(String color, String reg) {
         Car car = null;

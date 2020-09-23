@@ -1,3 +1,5 @@
+package database;
+
 import org.apache.http.HttpHost;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.delete.DeleteRequest;
@@ -17,6 +19,8 @@ import java.io.InputStreamReader;
 
 import java.net.UnknownHostException;
 import java.util.*;
+
+import Object.Car;
 
 
 public class elasticsearch {
@@ -47,8 +51,8 @@ public class elasticsearch {
     private static void  connectES() throws UnknownHostException {
         client = new RestHighLevelClient(
                 RestClient.builder(
-                        new HttpHost("localhost", 9200, "http"),
-                        new HttpHost("localhost", 9201, "http")));
+                        new HttpHost(HOST, port1, SCHEME),
+                        new HttpHost(HOST, port2, SCHEME)));
         try {
             GetRequest getPersonRequest = new GetRequest("tickets");
             getPersonRequest.id("ticketIDs");
@@ -318,7 +322,7 @@ public class elasticsearch {
             slotSet.add(i);
         }
     }
-    private static Car getCar(String color,  String reg) {
+    private static Car getCar(String color, String reg) {
         Car car = null;
         int assignSlot = -1;
         try {

@@ -1,3 +1,5 @@
+package database;
+
 import redis.clients.jedis.Jedis;
 
 import java.io.BufferedReader;
@@ -5,22 +7,28 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class RadisDb {
+import Object.Car;
+
+public class RedisDb {
     private static Jedis jedis;
     private static int slotsPerFloor;
     private static int totalFloors;
     private static TreeSet<Integer> slotSet = new TreeSet<>();
     private static Object list[];
+    private static String hostURL;
+    private static int hostPort;
 
-    public RadisDb(int floor, int slot) {
+    public RedisDb(int floor, int slot, String host, int port) {
         slotsPerFloor = slot;
         totalFloors = floor;
+        hostURL = host;
+        hostPort = port;
         fillAssignSlot();
         connectRadis();
     }
 
     private void connectRadis() {
-        jedis = new Jedis("localhost", 6379);
+        jedis = new Jedis(hostURL, hostPort);
         System.out.println("Server is running: Ping-" + jedis.ping());
         list = jedis.keys("*").toArray();
         for(int i = 0; i<list.length; i++) {
@@ -170,7 +178,7 @@ public class RadisDb {
             slotSet.add(i);
         }
     }
-    private static Car getCar(String color,  String reg) {
+    private static Car getCar(String color, String reg) {
         Car car = null;
         int assignSlot = -1;
         try {

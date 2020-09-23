@@ -1,3 +1,5 @@
+package database;
+
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.client.FindIterable;
@@ -15,6 +17,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
+import Object.Car;
 
 public class MongoDbConnect {
     private static  MongoClient client;
@@ -25,19 +28,23 @@ public class MongoDbConnect {
     private static String user;
     private static String pass;
     private static TreeSet<Integer> slotSet = new TreeSet<>();
+    private static String hostURL;
+    private static int hostPort;
 
-    public MongoDbConnect(int floor, int slot , String userN , String passW) throws IOException {
+    public MongoDbConnect(int floor, int slot , String userN , String passW,String host, int port) throws IOException {
         slotsPerFloor = slot;
         totalFloors = floor;
         user = userN;
         pass = passW;
+        hostURL = host;
+        hostPort = port;
         fillAssignSlot();
         connectMongoDb();
     }
 
     public static void connectMongoDb() throws IOException{
 
-        client = new MongoClient("localhost",27017);
+        client = new MongoClient(hostURL,hostPort);
         MongoCursor<String> dbsCursor = client.listDatabaseNames().iterator();
         boolean checkDb = false;
         while(dbsCursor.hasNext()) {
@@ -51,11 +58,11 @@ public class MongoDbConnect {
                     user, "parkingdb", pass.toCharArray());
         }
         database = client.getDatabase("parkingDb");
-        boolean collectionExists = client.getDatabase("parkingDb").listCollectionNames()
-                .into(new ArrayList<String>()).contains("cars");
-        if(!collectionExists){
-            database.createCollection("cars");
-        }
+//        boolean collectionExists = client.getDatabase("parkingDb").listCollectionNames()
+//                .into(new ArrayList<String>()).contains("cars");
+//        if(!collectionExists){
+//            database.createCollection("cars");
+//        }
         collection = database.getCollection("cars");
         FindIterable<Document> iterDoc = collection.find().projection(
                 Projections.fields(Projections.include("floor", "slot"), Projections.excludeId()));
@@ -169,8 +176,7 @@ public class MongoDbConnect {
             int slotC = dd.getInteger("slot");
             int addedSlot = ((floorC-1)*slotsPerFloor)+ slotC;
             slotSet.add(addedSlot);
-        }
-        collection.deleteOne(Filters.eq("ticket",ticket));
+        }           collection.deleteOne(Filters.eq("ticket",ticket));
     }
 
     private static void getRegisteredCarsWithColorMongoDB(String color) {
@@ -182,7 +188,7 @@ public class MongoDbConnect {
         }
     }
 
-    private static Car getCar(String color,  String reg) {
+    private static Car getCar(String color, String reg) {
         Car car = null;
         int assignSlot = -1;
         try {

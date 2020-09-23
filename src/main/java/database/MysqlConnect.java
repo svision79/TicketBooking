@@ -1,26 +1,28 @@
+package database;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.TreeSet;
-
+import Object.Car;
 import static java.lang.System.exit;
 
-public class DataBaseConnect {
+public class MysqlConnect {
     private static Connection con;
     private static  int slotsPerFloor;
     private static int totalFloors;
     private static TreeSet<Integer> slotSet = new TreeSet<>();
-    public DataBaseConnect(int floors ,int Slots , String user , String password){
+    public MysqlConnect(int floors ,int Slots , String user , String password,String databaseURL){
         slotsPerFloor = Slots;
         totalFloors = floors;
         fillAssignSlot();
-        connectDatabase(user, password);
+        connectDatabase(user, password, databaseURL);
     }
-    private void connectDatabase(String user, String pass) {
+    private void connectDatabase(String user, String pass, String databaseURL) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/parking", user,pass);
+            con = DriverManager.getConnection(databaseURL, user,pass);
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM cars");
             int floorC = -1;
@@ -108,6 +110,7 @@ public class DataBaseConnect {
                     }
                 }
             }else if(query == 0){
+                con.close();
                 end = true;
             } else{
                 System.out.println("Wrong query");
@@ -115,7 +118,7 @@ public class DataBaseConnect {
         }
     }
 
-    private static Car getCar(String color,  String reg) {
+    private static Car getCar(String color, String reg) {
         Car car = null;
         int assignSlot = -1;
         try {

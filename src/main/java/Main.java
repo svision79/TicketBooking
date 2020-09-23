@@ -4,11 +4,11 @@
  * Main Driver Class
 
  */
+import database.*;
+
 import java.sql.*;
 import java.util.*;
 import java.io.*;
-
-import static java.lang.System.exit;
 
 class Main {
 
@@ -34,15 +34,20 @@ class Main {
         }else if(functionToUse.equals("mysqlDB")){
             String user = properties.getProperty("user");
             String pass = properties.getProperty("password");
-            DataBaseConnect database = new DataBaseConnect(slot, floor, user , pass);
+            String databaseURL = properties.getProperty("database");
+            MysqlConnect database = new MysqlConnect(slot, floor, user , pass, databaseURL);
             database.callQueries();
         }else if(functionToUse.equals("mongoDB")){
             String user = properties.getProperty("user");
             String pass = properties.getProperty("password");
-            MongoDbConnect mongoDb = new MongoDbConnect(floor,slot,user,pass);
+            String host = properties.getProperty("host");
+            int port1 = Integer.parseInt(properties.getProperty("port1"));
+            MongoDbConnect mongoDb = new MongoDbConnect(floor,slot,user,pass,host,port1);
             mongoDb.callQueries();
         }else if(functionToUse.equals("radisDB")){
-            RadisDb radisDB = new RadisDb(floor, slot);
+            String host = properties.getProperty("host");
+            int port1 = Integer.parseInt(properties.getProperty("port1"));
+            RedisDb radisDB = new RedisDb(floor, slot, host, port1);
             radisDB.callQueries();
         }else if(functionToUse.equals("ES")){
             String host = properties.getProperty("host");

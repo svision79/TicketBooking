@@ -1,3 +1,5 @@
+package database;
+
 import org.apache.http.HttpHost;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.delete.DeleteRequest;
@@ -10,7 +12,7 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.mapper.ObjectMapper;
-
+import Object.Car;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,11 +32,19 @@ public class elasticsearch {
     private static ArrayList<String> tickets = new ArrayList();
     private static String ticketsA = "";
     private static RestHighLevelClient client;
-    private static ObjectMapper objM;
 
 
 
     public elasticsearch(int floor, int slot, String host, int port_1, int port_2) throws UnknownHostException {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if(client != null){
+                try {
+                    client.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }));
         totalFloors = floor;
         slotsPerFloor = slot;
         HOST = host;
@@ -318,7 +328,7 @@ public class elasticsearch {
             slotSet.add(i);
         }
     }
-    private static Car getCar(String color,  String reg) {
+    private static Car getCar(String color, String reg) {
         Car car = null;
         int assignSlot = -1;
         try {

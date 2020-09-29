@@ -35,11 +35,10 @@ public class ParkingResponse {
 
     @RequestMapping(method= RequestMethod.POST,value="/parkingDB/newCar")
     public String enterCar(@RequestBody Car car){
-//        System.out.println("xxx");
         if(car == null){
             return "Not created";
         }
-//        System.out.println(car.getRegNo());
+
         boolean checkCar = mongoDb.checkCarExists(car.getRegNo());
         Car Ncar = mongoDb.getCar(car.getCarColor(),car.getRegNo());
         if (Ncar == null){
@@ -54,7 +53,7 @@ public class ParkingResponse {
     }
     @RequestMapping(method= RequestMethod.DELETE,value="/parkingDB/carExit/{ticket}")
     public String carExit(@PathVariable String ticket){
-        return mongoDb.removeFromMongoDb(ticket);
-
+        mongoDb.removeFromMongoDb(ticket);
+        return mongoDb.printAll();
     }
 }

@@ -1,9 +1,12 @@
+package database;
+
 import redis.clients.jedis.Jedis;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import Object.Car;
 
 public class RadisDb {
     private static Jedis jedis;
@@ -13,6 +16,11 @@ public class RadisDb {
     private static Object list[];
 
     public RadisDb(int floor, int slot) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if(jedis!= null){
+                jedis.close();
+            }
+        }));
         slotsPerFloor = slot;
         totalFloors = floor;
         fillAssignSlot();
@@ -170,7 +178,7 @@ public class RadisDb {
             slotSet.add(i);
         }
     }
-    private static Car getCar(String color,  String reg) {
+    private static Car getCar(String color, String reg) {
         Car car = null;
         int assignSlot = -1;
         try {

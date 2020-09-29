@@ -1,3 +1,5 @@
+package database;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -5,6 +7,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
+import Object.Car;
 
 public class InMemory {
     private static int totalFloors;

@@ -13,11 +13,7 @@ import java.util.Properties;
 public class ParkingApi {
     public static MongoDbConnect mongoDb;
     public static void main(String[] args) throws IOException {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if(MongoDbConnect.client != null){
-                MongoDbConnect.client.close();
-            }
-        }));
+
         FileReader propertiesFile = new FileReader("src/main/resources/function.properties");
         Properties properties = new Properties();
         properties.load(propertiesFile);

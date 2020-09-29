@@ -1,3 +1,5 @@
+package database;
+
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.client.FindIterable;
@@ -12,32 +14,43 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import Object.Car;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
 
 public class MongoDbConnect {
-    private static  MongoClient client;
+    public static  MongoClient client;
     private static MongoDatabase database;
     private static MongoCollection<Document> collection;
     private static  int slotsPerFloor;
     private static int totalFloors;
     private static String user;
     private static String pass;
+    private static String hostUrl;
+    private static int portNo;
     private static TreeSet<Integer> slotSet = new TreeSet<>();
 
-    public MongoDbConnect(int floor, int slot , String userN , String passW) throws IOException {
+    public MongoDbConnect(int floor, int slot , String userN , String passW , String host, int port1) throws IOException {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if(client != null){
+                client.close();
+            }
+        }));
         slotsPerFloor = slot;
         totalFloors = floor;
         user = userN;
         pass = passW;
+        hostUrl = host;
+        portNo = port1;
         fillAssignSlot();
         connectMongoDb();
     }
 
     public static void connectMongoDb() throws IOException{
 
-        client = new MongoClient("localhost",27017);
+        client = new MongoClient(hostUrl,portNo);
         MongoCursor<String> dbsCursor = client.listDatabaseNames().iterator();
         boolean checkDb = false;
         while(dbsCursor.hasNext()) {
@@ -142,26 +155,27 @@ public class MongoDbConnect {
         }
     }
 
-    private static void getSlotWithRegNoMongoDb(String regNo) {
+    public static String getSlotWithRegNoMongoDb(String regNo) {
+        StringBuilder result = new StringBuilder();
         FindIterable<Document> iterDoc = collection.find(Filters.eq("registration",regNo)).projection(
                 Projections.fields(Projections.include("floor", "slot"), Projections.excludeId()));
-        Iterator it = iterDoc.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next());
+        for (Document document : iterDoc) {
+            result.append(document).append("\n");
         }
+        return result.toString();
     }
 
-    private static void getSlotsWithColorMongoDb(String color) {
+    public static String getSlotsWithColorMongoDb(String color) {
+        StringBuilder result = new StringBuilder();
         FindIterable<Document> iterDoc = collection.find(Filters.eq("color",color)).projection(
                 Projections.fields(Projections.include("floor", "slot"), Projections.excludeId()));
-
-        Iterator it = iterDoc.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next());
+        for (Document document : iterDoc) {
+            result.append(document).append("\n");
         }
+        return result.toString();
     }
 
-    private static void removeFromMongoDb(String ticket) {
+    public static void removeFromMongoDb(String ticket) {
         FindIterable<Document> iterDoc = collection.find(Filters.eq("ticket",ticket)).projection(
                 Projections.fields(Projections.include("floor", "slot"), Projections.excludeId()));
         for(Document dd : iterDoc){
@@ -173,16 +187,17 @@ public class MongoDbConnect {
         collection.deleteOne(Filters.eq("ticket",ticket));
     }
 
-    private static void getRegisteredCarsWithColorMongoDB(String color) {
+    public static String getRegisteredCarsWithColorMongoDB(String color) {
+        StringBuilder result = new StringBuilder();
         FindIterable<Document> iterDoc = collection.find(Filters.eq("color",color)).projection(
                 Projections.fields(Projections.include("registration"), Projections.excludeId()));
-        Iterator it = iterDoc.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next());
+        for (Document document : iterDoc) {
+            result.append(document).append("\n");
         }
+        return result.toString();
     }
 
-    private static Car getCar(String color,  String reg) {
+    public static Car getCar(String color, String reg) {
         Car car = null;
         int assignSlot = -1;
         try {
@@ -211,7 +226,7 @@ public class MongoDbConnect {
         return car;
     }
 
-    private static void insertIntoMongoDb(Car car) {
+    public static void insertIntoMongoDb(Car car) {
         String color = car.getCarColor();
         String regNo = car.getRegNo();
         String ticket = car.getTicketNo();
@@ -234,13 +249,19 @@ public class MongoDbConnect {
             slotSet.add(i);
         }
     }
-    private static void printAll(){
+    public static String printAll(){
+        StringBuilder result = new StringBuilder();
         FindIterable<Document> iterDoc = collection.find();
-        int i = 1;
-        Iterator it = iterDoc.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next());
-            i++;
+        for (Document document : iterDoc) {
+            result.append(document).append("\n");
         }
+        return result.toString();
+    }
+
+    public boolean checkCarExists(String regNo) {
+        FindIterable<Document> iterDoc = collection.find(Filters.eq("registration",regNo)).projection(
+                Projections.fields(Projections.include("floor", "slot"), Projections.excludeId()));
+        Iterator itr = iterDoc.iterator();
+        return itr.hasNext();
     }
 }

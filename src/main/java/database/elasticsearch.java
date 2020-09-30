@@ -36,15 +36,15 @@ public class elasticsearch {
 
 
     public elasticsearch(int floor, int slot, String host, int port_1, int port_2) throws UnknownHostException {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if(client != null){
-                try {
-                    client.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }));
+//        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+//            if(client != null){
+//                try {
+//                    client.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }));
         totalFloors = floor;
         slotsPerFloor = slot;
         HOST = host;

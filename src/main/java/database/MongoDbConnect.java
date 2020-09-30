@@ -1,6 +1,7 @@
 package database;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -33,11 +34,15 @@ public class MongoDbConnect {
     private static TreeSet<Integer> slotSet = new TreeSet<>();
 
     public MongoDbConnect(int floor, int slot , String userN , String passW , String host, int port1) throws IOException {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if(client != null){
-                client.close();
-            }
-        }));
+       try {
+           Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+               if (client != null) {
+                   client.close();
+               }
+           }));
+       }catch(Exception e){
+           e.printStackTrace();
+       }
         slotsPerFloor = slot;
         totalFloors = floor;
         user = userN;
@@ -48,9 +53,10 @@ public class MongoDbConnect {
         connectMongoDb();
     }
 
-    public static void connectMongoDb() throws IOException{
-
-        client = new MongoClient(hostUrl,portNo);
+    public static void connectMongoDb(){
+//        if (client == null) {
+            client = new MongoClient(hostUrl, portNo);
+//        }
         MongoCursor<String> dbsCursor = client.listDatabaseNames().iterator();
         boolean checkDb = false;
         while(dbsCursor.hasNext()) {
@@ -210,7 +216,6 @@ public class MongoDbConnect {
             int slot = assignSlot % slotsPerFloor;
 
             String ticket;
-//        System.out.println(assignSlot+" " + slotsPerFloor);
             if (assignSlot < slotsPerFloor) {
                 ticket = floor + "tt" + assignSlot;
                 car = new Car(color, reg, floor, assignSlot, ticket);

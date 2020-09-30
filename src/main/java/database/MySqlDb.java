@@ -16,15 +16,15 @@ public class MySqlDb {
     private static int totalFloors;
     private static TreeSet<Integer> slotSet = new TreeSet<>();
     public MySqlDb(int floors , int Slots , String user , String password){
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if(con != null){
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
-        }));
+//        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+//            if(con != null){
+//                try {
+//                    con.close();
+//                } catch (SQLException throwables) {
+//                    throwables.printStackTrace();
+//                }
+//            }
+//        }));
         slotsPerFloor = Slots;
         totalFloors = floors;
         fillAssignSlot();

@@ -16,11 +16,11 @@ public class RadisDb {
     private static Object list[];
 
     public RadisDb(int floor, int slot) {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if(jedis!= null){
-                jedis.close();
-            }
-        }));
+//        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+//            if(jedis!= null){
+//                jedis.close();
+//            }
+//        }));
         slotsPerFloor = slot;
         totalFloors = floor;
         fillAssignSlot();

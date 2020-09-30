@@ -3,6 +3,7 @@
 import database.InMemory;
 
 import java.sql.SQLException;
+import Object.Car;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,7 +52,7 @@ class TicketTest {
         String outputM =  testMain.getSlotsWithColor("white");
         assertEquals(returnCars.toString(),outputM);
 
-//        testMain.carExits("1tt3");
+        testMain.carExits("1tt3");
         testMain.carEnters("blue","JK01NNN1");
         String outputNew = testMain.getSlotWithRegNo("JK01NNN1");
         String expectedNew = "Floor: " + 1 + " Slot: " + 3;

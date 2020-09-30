@@ -12,9 +12,8 @@ import java.util.Properties;
 @SpringBootApplication(exclude = MongoAutoConfiguration.class)
 public class ParkingApi {
     public static MongoDbConnect mongoDb;
-    public static void main(String[] args) throws IOException {
-
-        FileReader propertiesFile = new FileReader("src/main/resources/function.properties");
+    public  ParkingApi()throws IOException {
+        FileReader propertiesFile = new FileReader("function.properties");
         Properties properties = new Properties();
         properties.load(propertiesFile);
         String functionToUse = properties.getProperty("functionToBeUsed");
@@ -26,9 +25,12 @@ public class ParkingApi {
         String pass = properties.getProperty("password");
         String host = properties.getProperty("host");
         int port1 = Integer.parseInt(properties.getProperty("port1"));
-        mongoDb = new MongoDbConnect(floor,slot,user,pass,host,port1);
+        if(mongoDb == null){
+            mongoDb = new MongoDbConnect(floor,slot,user,pass,host,port1);
+        }
+    }
+    public void apiStart(String args[]){
         SpringApplication.run(ParkingApi.class,args);
-
     }
 
 }

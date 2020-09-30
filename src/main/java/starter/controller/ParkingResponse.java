@@ -49,7 +49,7 @@ public class ParkingResponse {
         }else {
             mongoDb.insertIntoMongoDb(Ncar);
         }
-        return "Ticket Assign"+ Ncar.getTicketNo();
+        return "Ticket Assigned: "+ Ncar.getTicketNo();
     }
     @RequestMapping(method= RequestMethod.DELETE,value="/parkingDB/carExit/{ticket}")
     public String carExit(@PathVariable String ticket){

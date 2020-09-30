@@ -111,7 +111,7 @@ public class InMemory {
      * @param color color of the entered car
      * @param reg   registration number of the car
      */
-    protected static Car carEnters(String color, String reg) {
+    public static Car carEnters(String color, String reg) {
         int assignSlot=-1;
         try {
             assignSlot = slotSet.pollFirst();
@@ -152,7 +152,7 @@ public class InMemory {
      * Removes car from the hashmap and adds the empty slot to slot set
      * @param ticket Ticket assigned to car when it enters
      */
-    protected static void carExits(String ticket) throws SQLException {
+    public static void carExits(String ticket) throws SQLException {
         Car exitCar = allCars.get(ticket);
         if(exitCar == null){
             System.out.println("Wrong Ticket Number");
@@ -170,7 +170,7 @@ public class InMemory {
      * @param color color of the car to be searched
      * @return registeredCars  String containing registration number of all the cars with given color
      */
-    protected static String getRegisteredCarsWithColor(String color){
+    public static String getRegisteredCarsWithColor(String color){
         StringBuilder registeredCars = new StringBuilder();
         for (Map.Entry<String, Car> set : allCars.entrySet()) {
             Car infoCar = set.getValue();
@@ -190,7 +190,7 @@ public class InMemory {
      * @param color color of the car to be searched
      * @return returnCars  String containing floor and slot of cars of a given color
      */
-    protected static String getSlotsWithColor(String color){
+    public static String getSlotsWithColor(String color){
         StringBuilder returnCars= new StringBuilder();
         for (Map.Entry<String, Car> set : allCars.entrySet()) {
             Car infoCar = set.getValue();
@@ -206,7 +206,7 @@ public class InMemory {
      * @param registrationToSearch registration number of the car to be searched
      * @return slotParked   Slot of car of given registered Number
      */
-    protected static String getSlotWithRegNo(String registrationToSearch) {
+    public static String getSlotWithRegNo(String registrationToSearch) {
         int floor = -1;
         int slot = -1;
         String slotParked;

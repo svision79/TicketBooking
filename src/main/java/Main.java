@@ -21,7 +21,7 @@ class Main {
 
 
     public static void main(String[] args) throws IOException, SQLException {
-        FileReader propertiesFile = new FileReader("function.properties");
+        FileReader propertiesFile = new FileReader("src/main/resources/function.properties");
         Properties properties = new Properties();
         properties.load(propertiesFile);
         String functionToUse = properties.getProperty("functionToBeUsed");

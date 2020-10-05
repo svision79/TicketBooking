@@ -16,6 +16,7 @@ public class ParkingResponse {
 
     @RequestMapping("/parkingDB")
     public String showAll(){
+        System.out.println("Displayeing"+mongoDb.printAll());
         return mongoDb.printAll();
     }
     @RequestMapping("/parkingDB/slotsWithReg/{regNo}")

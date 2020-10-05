@@ -13,7 +13,7 @@ import java.util.Properties;
 public class ParkingApi {
     public static MongoDbConnect mongoDb;
     public  ParkingApi()throws IOException {
-        FileReader propertiesFile = new FileReader("function.properties");
+        FileReader propertiesFile = new FileReader("src/main/resources/function.properties");
         Properties properties = new Properties();
         properties.load(propertiesFile);
         String functionToUse = properties.getProperty("functionToBeUsed");

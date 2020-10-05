@@ -23,10 +23,7 @@ Note: Move the jar file to root of project in order to work
 
 # Docker
 DockerFile has been added
-Run the foloowing to run the jar in docker container
+Run the following to run the jar in docker container
 >> docker build -f Dockerfile -t parking-manager .
-//Pull mongo image first and run in background
 >> docker run -d -p 27017:27017 mongodb mongo 
-//Run the parking jar
 >> docker run --network = "host" --name parking -d parking-manager 
-//host network to access ports of host machine

@@ -27,3 +27,7 @@ Run the following to run the jar in docker container
 >> docker build -f Dockerfile -t parking-manager .
 >> docker run -d -p 27017:27017 mongodb mongo 
 >> docker run --network = "host" --name parking -d parking-manager 
+
+# Spring-boot-starter-data-mongodb
+Spring api of mongodb used. Functionality similar to springboot.
+Use /parkingDB/update in the start to retrieve all previously stored data

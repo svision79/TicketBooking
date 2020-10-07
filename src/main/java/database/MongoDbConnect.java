@@ -217,14 +217,14 @@ public class MongoDbConnect {
             String ticket;
             if (assignSlot < slotsPerFloor) {
                 ticket = floor + "tt" + assignSlot;
-                car = new Car(color, reg, floor, assignSlot, ticket);
+                car = new Car(floor, assignSlot, reg, color, ticket);
             } else {
                 if (slot == 0) {
                     floor -= 1;
                     slot = slotsPerFloor;
                 }
                 ticket = floor + "tt" + slot;
-                car = new Car(color, reg, floor, slot, ticket);
+                car = new Car(floor, assignSlot, reg, color, ticket);
             }
         }
         return car;
@@ -257,7 +257,10 @@ public class MongoDbConnect {
         StringBuilder result = new StringBuilder();
         FindIterable<Document> iterDoc = collection.find();
         for (Document document : iterDoc) {
-            result.append(document).append("\n");
+
+            String data = "Ticket No. " + document.get("ticket")+" Color: "+ document.get("color")+" Registration " + document.get("registration")
+                    +" Floor " + document.get("floor") + " Slot " + document.get("slot");
+            result.append(data).append("\n");
         }
         return result.toString();
     }

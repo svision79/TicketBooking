@@ -12,7 +12,7 @@ class TicketTest {
     @org.junit.jupiter.api.Test
 
     void main() throws SQLException {
-        Car car = new Car("red","JK02AA123",1,2,"1tt2"); //New Car Object
+        Car car = new Car(1,2,"JK02AA123","red","1tt2"); //New Car Object
 
         /*
             Testing getter Setter

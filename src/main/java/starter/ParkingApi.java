@@ -8,10 +8,15 @@ import database.MongoDbConnect;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.TreeSet;
 
-@SpringBootApplication(exclude = MongoAutoConfiguration.class)
+@SpringBootApplication
 public class ParkingApi {
+    public static  int slotsPerFloor;
+    public static int totalFloors;
+    public static TreeSet<Integer> slotSet = new TreeSet<>();
     public static MongoDbConnect mongoDb;
+
     public  ParkingApi()throws IOException {
         FileReader propertiesFile = new FileReader("src/main/resources/function.properties");
         Properties properties = new Properties();
@@ -19,18 +24,22 @@ public class ParkingApi {
         String functionToUse = properties.getProperty("functionToBeUsed");
         String floors = properties.getProperty("totalFloors");
         String slots = properties.getProperty("slotsPerFloor");
-        int floor = Integer.parseInt(floors);
-        int slot = Integer.parseInt(slots);
-        String user = properties.getProperty("user");
-        String pass = properties.getProperty("password");
-        String host = properties.getProperty("host");
-        int port1 = Integer.parseInt(properties.getProperty("port1"));
-        if(mongoDb == null){
-            mongoDb = new MongoDbConnect(floor,slot,user,pass,host,port1);
-        }
+        totalFloors = Integer.parseInt(floors);
+        slotsPerFloor = Integer.parseInt(slots);
+        fillAssignSlot();
+
     }
     public void apiStart(String args[]){
         SpringApplication.run(ParkingApi.class,args);
+    }
+    protected static void fillAssignSlot() {
+        int totalSlots = totalFloors*slotsPerFloor;
+        /*
+        Filling slot sets with total number of slots
+         */
+        for(int i = 1 ; i <= totalSlots ; i++){
+            slotSet.add(i);
+        }
     }
 
 }

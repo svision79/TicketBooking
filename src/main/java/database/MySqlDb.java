@@ -144,14 +144,14 @@ public class MySqlDb {
 //        System.out.println(assignSlot+" " + slotsPerFloor);
             if (assignSlot < slotsPerFloor) {
                 ticket = floor + "tt" + assignSlot;
-                car = new Car(color, reg, floor, assignSlot, ticket);
+                car = new Car(floor, assignSlot, reg, color, ticket);
             } else {
                 if (slot == 0) {
                     floor -= 1;
                     slot = slotsPerFloor;
                 }
                 ticket = floor + "tt" + slot;
-                car = new Car(color, reg, floor, slot, ticket);
+                car = new Car(floor, assignSlot, reg, color, ticket);
             }
         }
         return car;

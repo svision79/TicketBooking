@@ -1,31 +1,34 @@
 package Object;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
 /**
  * @author sahil
  * Car class to store information about the carss that enters the parking lot
  */
+@Document
 public class Car {
+    @Field
     private int floorNo;
+    @Field
     private int slotNo;
+    @Field
     private String regNo;
+    @Field
     private String carColor;
+    @Id
     private String ticketNo;
 
-    /**
-     * This constructor helps to create a car object with some particular information of the car
-     * @param color Color of the car
-     * @param reg   Registration Number of the car
-     * @param floor Floor assigned to the car
-     * @param slot  Slot on the assigned floor
-     * @param ticket Ticket issued for parking
-     */
-    public Car(String color, String reg , int floor , int slot, String ticket ){
-        this.carColor = color;
-        this.regNo = reg;
-        this.floorNo = floor;
-        this.slotNo = slot;
-        this.ticketNo = ticket;
+    public Car(int floorNo, int slotNo, String regNo, String carColor, String ticketNo) {
+        this.floorNo = floorNo;
+        this.slotNo = slotNo;
+        this.regNo = regNo;
+        this.carColor = carColor;
+        this.ticketNo = ticketNo;
     }
+
 
     /**
      * Getter method for floor number
